@@ -313,7 +313,7 @@ const App = () => {
       })
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="app font-monospace">
