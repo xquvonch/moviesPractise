@@ -36,7 +36,7 @@ import { Context } from "../context";
 const SearchPanel = () => {
   const [term, setTerm] = useState("");
 
-  const {_, dispatch} = useContext(Context)
+  const {dispatch} = useContext(Context)
   const updateTermHandler = (e) => {
     const term = e.target.value.toLowerCase();
     setTerm(term);

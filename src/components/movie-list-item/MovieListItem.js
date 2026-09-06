@@ -58,7 +58,7 @@ const MovieListItem = (props) => {
   //FUNCTION COMPONENT BULGANI UCHUN PROPSNI UZIDAN INTERPOLATSIYA QILIB OLYAPMIZ
   const { name, viewers, favourite, like, id } = props;
 
-  const { _, dispatch } = useContext(Context);
+  const {dispatch } = useContext(Context);
   const onDelete = () => {
     dispatch({ type: "ON_DELETE", payload: id });
   };

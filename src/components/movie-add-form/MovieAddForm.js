@@ -4,7 +4,7 @@ import { Context } from "../context";
 const MovieAddForm = ({ addForm }) => {
   const [state, setState] = useState({ name: "", views: "" });
 
-  const {_, dispatch} = useContext(Context);
+  const {dispatch} = useContext(Context);
   const onChangeHandlerInput = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
