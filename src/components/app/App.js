@@ -294,7 +294,7 @@ const App = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const { state, dispatch } = useContext(Context);
+  const { _, dispatch } = useContext(Context);
 
   useEffect(() => {
     setLoading(true);
