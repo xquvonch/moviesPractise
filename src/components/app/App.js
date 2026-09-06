@@ -1,12 +1,12 @@
-import React, { Component, useEffect, useState } from "react";
+import  { useContext, useEffect, useState } from "react";
 import AppInfo from "../app-info/App_info";
 import AppFilter from "../app-filter/AppFilter";
 import SearchPanel from "../searchPanel/SearchPanel";
 import "./App.css";
 import MovieList from "../movie-list/MovieList";
-import { v4 as uuidv4 } from "uuid";
 
 import MovieAddForm from "../movie-add-form/MovieAddForm";
+import { Context } from "../context";
 // //CLAS COMPONENT YASALISHI , REACT.COMPONENTDAN MEROS OLINYAPTI
 // class App extends Component {
 //   //CONSTRUCTOR CHAQIRILIB , UNGA PROPS BERIB YUBORILYAPTI
@@ -291,17 +291,17 @@ import MovieAddForm from "../movie-add-form/MovieAddForm";
 // // EXPORTNI XOXLAGANCHA ISHLATISH MUMKIN
 
 const App = () => {
-  const [data, setData] = useState([]);
-  const [term, setTerm] = useState("");
-  const [filter, setFilter] = useState("all");
+
   const [loading, setLoading] = useState(false);
+
+  const { state, dispatch } = useContext(Context);
 
   useEffect(() => {
     setLoading(true);
     fetch("https://jsonplaceholder.typicode.com/todos?_start=0&_limit=6")
       .then((response) => response.json())
       .then((json) => {
-        console.log(json);
+        // console.log(json);
         const newArr = json.map((item) => ({
           name: item.title,
           id: item.id,
@@ -309,92 +309,24 @@ const App = () => {
           like: false,
           favourite: false,
         }));
-        setData(newArr);
+        dispatch({ type: "GET_DATA", payload: newArr });
       })
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
   }, []);
 
-  const onDelete = (id) => {
-    const newArr = data.filter((item) => item.id !== id);
-    setData(newArr);
-  };
-
-  const addForm = (item) => {
-    const newItem = {
-      name: item.name,
-      viewers: item.viewers,
-      id: uuidv4(),
-      like: false,
-      favourite: true,
-    };
-    // const newArr = [...item, newItem];
-
-    setData((prevArr) => [...prevArr, newItem]);
-  };
-
-  const onToggleProp = (id, prop) => {
-    const newArr = data.map((item) => {
-      if (item.id === id) {
-        return { ...item, [prop]: !item[prop] };
-      }
-      return item;
-    });
-    setData(newArr);
-  };
-  const searchHandler = (arr, term) => {
-    if (term.length === 0) {
-      return arr;
-    }
-    return arr.filter((item) => item.name.toLowerCase().indexOf(term) > -1);
-  };
-
-  const updateTermHandler = (term) => setTerm(term);
-
-  const updateFilterHandler = (filter) => setFilter(filter);
-
-  const filterHandler = (arr, filter) => {
-    switch (filter) {
-      case "popular":
-        return arr.filter((item) => item.like);
-      case "mostViewers":
-        return arr.filter((item) => item.viewers > 800);
-
-      default:
-        return arr;
-    }
-  };
-
   return (
     <div className="app font-monospace">
       <div className="content">
-        <AppInfo
-          allMoviesCount={data?.length}
-          allFavouriteMoviesCount={
-            data?.filter((item) => item.favourite).length
-          }
-          allLikeMoviesCount={data?.filter((item) => item.like).length}
-        />
+        <AppInfo />
         <div className="search-panel">
-          <SearchPanel updateTermHandler={updateTermHandler} />
-          <AppFilter
-            filter={filter}
-            updateFilterHandler={updateFilterHandler}
-          />
+          <SearchPanel />
+          <AppFilter />
         </div>
-        {loading ? (
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        ) : (
-          <MovieList
-            visibleData={filterHandler(searchHandler(data, term), filter)}
-            onDelete={onDelete}
-            onToggleProp={onToggleProp}
-          />
-        )}
+        {loading && "Loading..."}
+        <MovieList />
 
-        <MovieAddForm addForm={addForm} />
+        <MovieAddForm />
       </div>
     </div>
   );

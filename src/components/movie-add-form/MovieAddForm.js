@@ -1,56 +1,53 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
+import { Context } from "../context";
 
+const MovieAddForm = ({ addForm }) => {
+  const [state, setState] = useState({ name: "", views: "" });
 
-const MovieAddForm=({addForm})=>{
-  const [state,setState]= useState({name:'',views:''})
-  const onChangeHandlerInput =e=>{
- setState({...state, [e.target.name]:e.target.value})
-}
+  const {_, dispatch} = useContext(Context);
+  const onChangeHandlerInput = (e) => {
+    setState({ ...state, [e.target.name]: e.target.value });
+  };
 
-const addFormHandler=(e)=>{
-e.preventDefault()
-if(state.name==='' || state.viewers===''){
-  alert("Maydonlar bo'sh esmaligiga ishonch hosil qiling")
-  return 
-}
-const data ={name:state.name,viewers: Number(state.views)}
-addForm(data)
-setState({name:"",views:""})
-}
- return (
-      <div className="movies-add-from element">
-        <h3>Yangi kino qo'shish</h3>
-        
-        <form className="add-form d-flex" 
-        onSubmit={addFormHandler}>
-          <input
-            name="name"
-            type="text"
-            value={state.name}
-            className="form-control new-post-label me-2"
-            placeholder="Qanday kino?"
-            onChange={onChangeHandlerInput}
-           
-          />
-          <input
-            value={state.views}
-            name="views"
-            type="number"
-            className="form-control new-post-label me-2 "
-            placeholder="Nechi marotaba ko'rilgan"
-            onChange={onChangeHandlerInput}
-          />
-          <button className="btn btn-outline-dark" type="submit">
-            {" "}
-            Qo'shish
-          </button>
-        </form>
-      </div>
-    );
-  }
+  const addFormHandler = (e) => {
+    e.preventDefault();
+    if (state.name === "" || state.viewers === "") {
+      alert("Maydonlar bo'sh esmaligiga ishonch hosil qiling");
+      return;
+    }
+    const data = { name: state.name, viewers: Number(state.views) };
+    dispatch({ type: "ADD_FORM", payload: data });
+    setState({ name: "", views: "" });
+  };
+  return (
+    <div className="movies-add-from element">
+      <h3>Yangi kino qo'shish</h3>
 
-
-
+      <form className="add-form d-flex" onSubmit={addFormHandler}>
+        <input
+          name="name"
+          type="text"
+          value={state.name}
+          className="form-control new-post-label me-2"
+          placeholder="Qanday kino?"
+          onChange={onChangeHandlerInput}
+        />
+        <input
+          value={state.views}
+          name="views"
+          type="number"
+          className="form-control new-post-label me-2 "
+          placeholder="Nechi marotaba ko'rilgan"
+          onChange={onChangeHandlerInput}
+        />
+        <button className="btn btn-outline-dark" type="submit">
+          {" "}
+          Qo'shish
+        </button>
+      </form>
+    </div>
+  );
+};
 
 // class MovieAddForm extends Component {
 //   constructor(props) {
@@ -63,7 +60,6 @@ setState({name:"",views:""})
 //       views: "",
 //     };
 
-    
 //   }
 
 //   //BU YERDA BITTA, FUNKSYA IKKITA FUNKSIYA UCHUN ISHLAYAPTI,
@@ -71,7 +67,7 @@ setState({name:"",views:""})
 //   onChangeHandler = (e) => {
 //     //EVENTNI OVOLYAPMIZ
 //     this.setState({
-//       //BU YERDA e.target.name , 
+//       //BU YERDA e.target.name ,
 //       //BIRMARTA INPUTNAME DAGI
 //       //NAME QIYMAT BN,IKKINCHI MARTA VIEWS QIYMAT BILAN KELYAPTI,
 //       //VA UNGA EVENT.TARGET.VALUE YANI , INPUTGA YOZILGAN QIYMAT BERILYAPTI
@@ -96,13 +92,10 @@ setState({name:"",views:""})
 //     });
 //   };
 
-
-
 //   render() {
 //     //THIS.STATE DAN DESTRUPTIZATSIYA QILIB NAME VA VIEWS NI OVOLYAPMAN
 //     const { name, views } = this.state;
 
-   
 // }
 
 export default MovieAddForm;
